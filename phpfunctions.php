@@ -28,7 +28,7 @@ class SunapeeDB
 	
 	public function login($email, $password) {
 		if($this->con === NULL) { return; }
-		$query = "SELECT * FROM admin WHERE email = \"$email\" AND password = \"$password\";";
+		$query = "SELECT * FROM user WHERE email = \"$email\" AND password = \"$password\";";
 		$result = mysql_query($query);
 		if (mysql_num_rows($result) != 0) {		
 	   		$_SESSION['email'] = $_POST["email"];
@@ -50,9 +50,9 @@ class SunapeeDB
 	}
 	
 	public function register_user($email, $password, $name, $college_affiliation, $status, $file_path) {
-		$query = "INSERT INTO user (email, password, name, college_affiliation, status, file_path) VALUES ('".$email."', '".$password."', '".$name."', '".$college_affiliation."', '".$status."', '".$file_path."');";
-		mysql_query("INSERT INTO user (email, password, name, college_affiliation, status, file_path) VALUES ('".$email."', '".$password."', '".$name."', '".$college_affiliation."', '".$status."', '".$file_path."');");
-		
+		echo "I'm in register_user!";
+		$query = "INSERT INTO user (email, password, name, college_affiliation, status, file_path, administrator) VALUES ('".$email."', '".$password."', '".$name."', '".$college_affiliation."', '".$status."', '".$file_path."', 'false');";
+		mysql_query($query);
 		$iduser = mysql_insert_id();
 		echo $query;
 		//header("Location: user.php?id=".$iduser);

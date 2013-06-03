@@ -53,21 +53,26 @@
 </head>
 
 <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
-	<div class="modal" style=" margin-top: 100px; margin-left: -175px; width: 350px;">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3>Login</h3>
-		</div>
+	<div class="hero-unit" style="width: 100%; height: 100%; padding: 20px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
+            <center>
+            	<br>
+                <h1>Login</h1>
+                <p>
+                    To enter the Art2Artifact portal.<br>
+		<a href="register.php">Register for access.</a>
+                </p>
+			</center>
+	<div class="modal" style="position: relative; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%; width: 350px;">
 		<div class="modal-body">
 			<form action="index.php" method="post" id="login-form">
 			<div class="control-group">
-				<label class="control-label" for="email">Email Address</label>
+				<label class="control-label" for="email">Email Address:</label>
 				<div class="controls">
 					<input type="text" class="input-xlarge" name="email" id="email">
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="name">Password</label>
+				<label class="control-label" for="name">Password:</label>
 				<div class="controls">
 					<input type="password" class="input-xlarge" name="password" id="name">
 				</div>
@@ -80,12 +85,12 @@
 					echo "<font color=\"red\">Incorrect User/Password combo!</font>";
 				}
 			?>
-		</div>
-		<div class="modal-footer">
-			
-			<input type="submit" value="Login" class="btn btn-primary"></a>
+			<center>
+			<input type="submit" value="Go!" class="btn btn-primary btn-large"></a>
+			</center>
 			</form>
 		</div>
+	</div>
 	</div>
 	<?php include("Includes/footer.php"); ?>
 </body>
