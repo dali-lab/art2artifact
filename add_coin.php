@@ -85,8 +85,8 @@ if (!isset($_SESSION['email'])) {
 
 	<?php include('Includes/header.php'); ?>
 
-<div class="well" style="width: 85%; margin-left: 70px; margin-top: 50px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
-
+<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
+ 
 	
 <form action="add_coin_php.php" method="post" ENCTYPE="multipart/form-data" class="form-horizontal" id="add-coin">
 	Photo:<input style="margin-left: 150px;" type="file" name="file" id="file"><br><br>

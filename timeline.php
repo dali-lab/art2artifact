@@ -60,8 +60,8 @@
     </head>
     <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;" onload="onLoad();" onresize="onResize();">
         <?php include('Includes/header.php'); ?>
-        <div class="well" style="width: 85%; margin-left: 70px; margin-top: 50px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
-            <?php include('Includes/search_filters_timeline.php'); ?>
+<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
+             <?php include('Includes/search_filters_timeline.php'); ?>
             <div id="my-timeline" style="height: 450px; border: 1px solid #aaa">
             </div>
             <noscript>

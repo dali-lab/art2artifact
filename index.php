@@ -48,8 +48,8 @@
 	
 	
 
-<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 100%; border-color: black;">
-	
+<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
+ 	
 	 <a class="btn btn-large pull-right" data-toggle="modal" href="#add_corpus_modal" style="margin-right: 50px;">+</a>
 <?php
 	   mb_internal_encoding('UTF-8');

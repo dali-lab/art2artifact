@@ -20,8 +20,8 @@ if (!isset($_SESSION['email'])) {
 	
 	
 
-<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 100%; border-color: black;">
-
+<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
+ 
 	<?php
 	   mb_internal_encoding('UTF-8');
        mb_http_output('UTF-8');

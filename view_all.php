@@ -76,7 +76,7 @@ if (!isset($_SESSION['email'])) {
 	
 	
 
-<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 100%; border-color: black;">
+<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
          
 <?php
 	   mb_internal_encoding('UTF-8');
@@ -89,16 +89,7 @@ if (!isset($_SESSION['email'])) {
 	   
 	   
 	   
-	   echo '<div style="margin-left: 0px;">To filter coins, select options, and click \'Submit\'<br>';
-	  
-	   echo '<div class="navbar" style="margin-bottom: 0px; margin-right: 30px; margin-left:0px; width: 800px;"><div class="navbar-inner" ><form class="navbar-form pull-left" name="map_options" method="post" action="view_all.php">';
-	   echo 'From: <input type="text" name="start_date" value="Start" style="width:75px;"/>';
-	   echo '<select name="start_era" style="width:60px;"><option value="">AD</option><option value="-">BCE</option></select>';
-	   echo '| To: <input type="text" name="end_date" value="End" style="width:75px;"/><select name="end_era" style="width:60px;">';
-	   echo '<option value="">AD</option><option value="-">BCE</option></select>|'; 
-   	   $db->get_locations(0);
 	   
-	   echo '<button type="submit" class="btn pull-right">Submit</button></form></div></div>';
 	   
 	   
 	   if (isset($_POST["start_date"])) {
@@ -108,7 +99,8 @@ if (!isset($_SESSION['email'])) {
 			if (isset($_POST["end_era"])) {$_SESSION["end_era"] = $_POST["end_era"];}
 			if (isset($_POST["mint_lat_long"])) {$_SESSION["mint_lat_long"] = $_POST["mint_lat_long"];}
 			if (isset($_POST["find_lat_long"])) {$_SESSION["find_lat_long"] = $_POST["find_lat_long"];}
-		   	$db->view_all_filtered($_SESSION["start_date"], $_SESSION["start_era"], $_SESSION["end_date"], $_SESSION["end_era"], $_SESSION["mint_lat_long"], $_SESSION["find_lat_long"]);
+		   	$db->filter_options();
+			$db->view_all_filtered($_SESSION["start_date"], $_SESSION["start_era"], $_SESSION["end_date"], $_SESSION["end_era"], $_SESSION["mint_lat_long"], $_SESSION["find_lat_long"]);
 					unset($_SESSION["start_date"]);
 					unset($_SESSION["start_era"]);
 					unset($_SESSION["end_date"]);
@@ -119,22 +111,25 @@ if (!isset($_SESSION['email'])) {
 	   }
 	   else {
 		   if (isset($_GET["searchby"])) {
-		   		print("<h4>Search Results: ".$_GET["searchby"]."</h4>");
+		   		echo ("<div class=\"row\"><h2>Search Results: ".$_GET["searchby"]."</h2>");
 		   		$tag = $_GET["searchby"];
-				print("<a href=\"delete_tag.php?title=".$tag."\" class=\"btn btn-primary\">Delete Tag</a>");
+				echo ("<a href=\"delete_tag.php?title=".$tag."\" class=\"btn btn-primary\">Delete Tag</a></div><br>");
+				$db->filter_options();
 				$db->get_tagged_coins($tag);
 		   }
 		   else if (isset($_GET["idcorpus"])) {
 		   		print ("<h4>Select the Coins to add to your corpus: </h4>");
 				echo '<div style="margin-left: 0px;">Select the coins to you wish to add from the table (they will turn green), then click ->';
 				echo '<button class="btn" style="margin-left: 10px; margin-bottom: 10px;" id="add_to_corpus">+</button></div>';
+				$db->filter_options();
 				$db->getpics();
 		   }
 		   else {
-		   		print("<h4>All Coins</h4>");
+		   		print("<h2>All Coins</h2>");
 				echo '<div style="margin-left: 0px;">To tag coins, select the coins in the table (they will turn green), then select the tag to add, and click \'TAG!\'<br>';
 	   			$db->get_tag_select();
 	  			echo '<button class="btn" style="margin-left:10px; margin-bottom: 10px;" id="tag_coins">TAG!</button></div>';
+				$db->filter_options();
 	       		$db->getpics();
 	   	   }
 	   }

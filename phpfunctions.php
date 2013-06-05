@@ -50,6 +50,18 @@ class SunapeeDB
 		mysql_free_result($result);
 	}
 	
+	public function filter_options() {
+	  
+	   echo '<div class="navbar" style="margin-bottom: 0px; margin-right: 30px; margin-left:0px; width: 850px;"><div class="navbar-inner" ><form class="navbar-form pull-left" name="map_options" method="post" action="view_all.php">';
+	   echo 'From: <input type="text" name="start_date" value="Start" style="width:75px;"/>';
+	   echo '<select name="start_era" style="width:60px;"><option value="">AD</option><option value="-">BCE</option></select>';
+	   echo '| To: <input type="text" name="end_date" value="End" style="width:75px;"/><select name="end_era" style="width:60px;">';
+	   echo '<option value="">AD</option><option value="-">BCE</option></select>|'; 
+   	   $this->get_locations(0);
+	   
+	   echo '<button type="submit" class="btn pull-right">Submit</button></form></div></div>';
+	}
+	
 	public function get_user_corpora($email) {
 		$query = "select idcorpus as ID, title as Title, description as Description, date_created as Date from corpus where created_by = \"" . $email . "\";";
 		$result = mysql_query($query);

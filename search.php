@@ -16,8 +16,8 @@ if (!isset($_SESSION['email'])) {
     </head>
     <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
         <?php include('Includes/header.php'); ?>
-        <div class="well" style="width: 80%; height: 40%; margin-left: 10%; margin-top: 50px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
-        <center>
+<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
+         <center>
             <h1>Search!</h1>
             <?php
         			   mb_internal_encoding('UTF-8');
