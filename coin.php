@@ -69,8 +69,9 @@ $(document).ready(function(){
 
 	<?php include('Includes/header.php'); ?>
 	                 
+<div style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 100%; border-color: black;">
 
-<div class="well" style="width: 85%; margin-left: 70px; margin-top: 50px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
+<div class="well" style="width: 85%; margin-left: 70px; margin-top: 50px; margin-bottom: 50px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
 	<!--img src="images/images.jpeg" style="width:300px; height: 200px;" id="test_img" /-->
 	<?php
 	   mb_internal_encoding('UTF-8');
@@ -113,7 +114,7 @@ $(document).ready(function(){
 	 </div>
 </div>
 
-
+</div>
 
 </div>
 

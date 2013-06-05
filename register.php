@@ -53,7 +53,6 @@
         </script>
     </head>
     <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
-        <?php include('Includes/header.php'); ?>
         <div class="hero-unit" style="width: 100%; height: 100%; padding: 20px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
             <center>
                 <h1>Sign Up</h1>

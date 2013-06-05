@@ -28,19 +28,20 @@ class SunapeeDB
 	
 	public function login($email, $password) {
 		if($this->con === NULL) { return; }
-		$query = "SELECT * FROM user WHERE email = \"$email\" AND password = \"$password\";";
+		$encrypted_password = md5($password);
+		$query = "SELECT * FROM user WHERE email = \"$email\" AND password = \"$encrypted_password\";";
 		$result = mysql_query($query);
 		if (mysql_num_rows($result) != 0) {		
-	   		$_SESSION['email'] = $_POST["email"];
-	   		$_SESSION['password'] = $_POST["password"];
 			if(!$result) { die("SQL Error: " . mysql_error()); }
 		
 			$row = mysql_fetch_assoc($result);
 			$username = $row["name"];
-			print("<h4>Welcome ".$username.",</h4>");
-			print("<h5>Select an option from the menu above, or click the coin you wish to examine</h5>");
-			$this->getpics();
-		}
+			print("<h2>Welcome ".$username.",</h2>");
+			echo '<img style="width: 175px;" ';
+			echo 'src="'.$row["file_path"].'"/>';
+			echo '<h4>Your Corpora:</h4>';
+			$this->get_user_corpora($email);
+		} 
 		else{
   			header("Location: login.php?test=fail");
 		}
@@ -49,12 +50,68 @@ class SunapeeDB
 		mysql_free_result($result);
 	}
 	
+	public function get_user_corpora($email) {
+		$query = "select idcorpus as ID, title as Title, description as Description, date_created as Date from corpus where created_by = \"" . $email . "\";";
+		$result = mysql_query($query);
+		 
+		
+		print("<table class=\"table table-bordered table-hover table-striped\">\n<thead><tr>");
+		
+		for($i=0; $i < mysql_num_fields($result); $i++) {
+	    	print("<th>" . mysql_field_name($result, $i) . "</th>");
+		}
+		print ("<th>Link</th>");
+		
+		print("</tr></thead>\n");
+	
+		while ($row = mysql_fetch_assoc($result)) {
+    	      print("\t<tr>\n");
+    	      foreach ($row as $col) {
+       	          print("\t\t<td>$col</td>\n");
+    	      }
+			  print("\t\t<td><a href=\"corpus.php?idcorpus=".$row["ID"]."\">View</a></td>\n");
+    	      print("\t</tr>\n");
+		}
+		print("</table>\n");    
+		//$this->print_table($result);
+	}
+	
+	public function display_corpus($idcorpus) {
+		$i = 0;
+		$query = mysql_query("SELECT * FROM corpus WHERE idcorpus = ".$idcorpus);
+		$data = mysql_fetch_assoc($query);
+		echo '<h1>'.$data["title"].'</h1>';
+		echo '<h4>'.$data["description"].'</h4>';
+		$query = mysql_query("SELECT * FROM in_corpus WHERE corpus_idcorpus = ".$idcorpus);
+		echo '<table class="table table-bordered"><tr>';
+		while($data=mysql_fetch_assoc($query))
+		{
+			 $coin = $data["coin_idcoin"];
+			
+				$result = mysql_query("SELECT * FROM coin WHERE idcoin = ".$coin.";");
+				if ( ($i % 4) == 0) {
+					echo '</tr><tr>';
+				}
+				$the_coin = mysql_fetch_assoc($result);
+	  			$encoded = $the_coin["img"];
+				echo '<td id='.$the_coin["idcoin"].'><a href="http://www.cs.dartmouth.edu/~salsbury/art2artifact/coin.php?idcoin='.$the_coin["idcoin"].'">';
+	 			echo '<img style="width: 175px;" ';
+				echo 'src="'.$the_coin["file_path"].'"/></a></td>';
+				$i++;
+			
+		}
+		echo '</table>';
+	
+	}
+	
 	public function register_user($email, $password, $name, $college_affiliation, $status, $file_path) {
 		echo "I'm in register_user!";
-		$query = "INSERT INTO user (email, password, name, college_affiliation, status, file_path, administrator) VALUES ('".$email."', '".$password."', '".$name."', '".$college_affiliation."', '".$status."', '".$file_path."', 'false');";
+		$encrypted_pass = md5($password);
+		$query = "INSERT INTO user (email, password, name, college_affiliation, status, file_path, administrator) VALUES ('".$email."', '".$encrypted_pass."', '".$name."', '".$college_affiliation."', '".$status."', '".$file_path."', 'false');";
 		mysql_query($query);
 		$iduser = mysql_insert_id();
 		echo $query;
+		header("Location: index.php");
 		//header("Location: user.php?id=".$iduser);
 	}
 	
@@ -98,6 +155,35 @@ class SunapeeDB
 		echo 'idcoin='.$idcoin;
 		
 		header("Location: coin.php?idcoin=".$idcoin);
+	}
+	
+	public function create_corpus($created_by, $title, $description) {
+		$query = "INSERT INTO corpus (created_by, title, description) values ('".$created_by."', '".$title."', '".$description."');";
+		mysql_query($query);
+				
+		header("Location: view_all.php?idcorpus=".mysql_insert_id());
+	}
+	
+	public function add_to_corpus($idcorpus, $coinsArray) {
+		foreach ($coinsArray as $coin) {
+			$query = "INSERT INTO in_corpus (corpus_idcorpus, coin_idcoin) VALUES(".$idcorpus.", ".$coin.");";
+			echo 'insert query = '.$query;
+			mysql_query($query);
+		}
+		header("Location: view_all.php");
+	}
+	
+	public function tag_coin_set($tag_title, $coinsArray) {
+		$query = "SELECT idtag FROM tag WHERE title = \"$tag_title\";";
+		echo 'tag id search query = '.$query;
+		$result = mysql_query($query);
+		$data=mysql_fetch_assoc($result);
+		foreach ($coinsArray as $coin) {
+			$query = "INSERT INTO coin_has_tag (coin_idcoin, tag_idtag) VALUES (".$coin.", ".$data['idtag'].");";
+			echo 'insert query = '.$query;
+			mysql_query($query);
+		}
+		header("Location: view_all.php");
 	}
 	
 	public function add_location_tag($locationName, $idcoin) {
@@ -149,7 +235,7 @@ class SunapeeDB
 				echo '</tr><tr>';
 			}
 	  		$encoded = $data["img"];
-			echo '<td><a href="http://www.cs.dartmouth.edu/~salsbury/art2artifact/coin.php?idcoin='.$data["idcoin"].'">';
+			echo '<td id='.$data["idcoin"].'><a href="http://www.cs.dartmouth.edu/~salsbury/art2artifact/coin.php?idcoin='.$data["idcoin"].'">';
 	 		echo '<img style="width: 175px;" ';
 			echo 'src="'.$data["file_path"].'"/></a></td>';
 			$i++;
@@ -191,6 +277,18 @@ class SunapeeDB
 		}
 		echo '</table>';
 		
+	}
+	
+	// create selector with all available tags
+	public function get_tag_select() {
+		$result = mysql_query("SELECT DISTINCT * FROM tag");
+		print("<select name=\"tag_set_selector\" id=\"tag_selector\">");
+		
+		while ($row = mysql_fetch_assoc($result)) {
+			echo '<option value="'.$row["idtag"].'">'.$row["title"].'</option>';
+		}
+		
+			echo '</select>';
 	}
 	
 	// get all available search tags
