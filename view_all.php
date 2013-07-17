@@ -113,7 +113,9 @@ if (!isset($_SESSION['email'])) {
 		   if (isset($_GET["searchby"])) {
 		   		echo ("<div class=\"row\"><h2>Search Results: ".$_GET["searchby"]."</h2>");
 		   		$tag = $_GET["searchby"];
+				if ($_SESSION['status'] == "Admin") {
 				echo ("<a href=\"delete_tag.php?title=".$tag."\" class=\"btn btn-primary\">Delete Tag</a></div><br>");
+				}
 				$db->filter_options();
 				$db->get_tagged_coins($tag);
 		   }

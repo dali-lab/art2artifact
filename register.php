@@ -59,12 +59,20 @@
                 <p>
                     To get access to the Art2Artifact database
                 </p>
+				<p>
+					<a href="login.php">Return to login page.</a>
+				</p>
 			</center>	
 	<div class="modal" style="position: relative; top: auto; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;">
                 
 				<form action="add_user_php.php" method="post" ENCTYPE="multipart/form-data" class="form-horizontal" id="add-user" style="margin-top: 10px; margin-left: 10px; margin-bottom: 20px;">
+					<?php 
+						if (isset($_GET["error"])) {
+							echo '<p><font color="red">'.$_GET["error"].'!</font></p>';
+						}
+					?>
 					<div class="control-group">
-                        <label class="control-label" for="email">
+                        <label class="control-label" for="file">
                             Profile Picture
                         </label>
                         <div class="controls">
@@ -110,18 +118,6 @@
                         </label>
                         <div class="controls">
 	                        <input type="text" name="affiliation">
-                        </div>
-                    </div>
-					<div class="control-group">
-                        <label class="control-label" for="email">
-                            Status:
-                        </label>
-                        <div class="controls">
-                        <select name="status" style="width: 220px;">
-                            <option value="Student">Student</option>
-                            <option value="Professor">Professor</option>
-                            <option value="Other">Other</option>
-                        </select>
                         </div>
                     </div>
 					<center>

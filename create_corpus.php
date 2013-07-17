@@ -1,5 +1,5 @@
 <?php
-	echo "AS;DLFKJAS;DLFKJAS;DLFKJAS;DLFKJAS;DLKFJ";
+
 	session_start();
 	include "phpfunctions.php";
 	$db = new SunapeeDB();

@@ -29,21 +29,10 @@
                 var bandInfos = [Timeline.createBandInfo({
                     eventSource: eventSource,
                     date: "0",
-                    width: "70%",
+                    width: "100%",
                     intervalUnit: Timeline.DateTime.DECADE,
                     intervalPixels: 100
-                }), Timeline.createBandInfo({
-                    showEventText: false,
-					eventSource: eventSource,
-                    trackHeight: 0.5,
-                    trackGap: 0.2,
-                    date: "0",
-                    width: "30%",
-                    intervalUnit: Timeline.DateTime.CENTURY,
-                    intervalPixels: 100
                 })];
-                bandInfos[1].syncWith = 0;
-                bandInfos[1].highlight = true;
                 tl = Timeline.create(document.getElementById("my-timeline"), bandInfos);
                 tl.loadJSON("load_coins.php", function(json, url){
                     eventSource.loadJSON(json, url);
@@ -62,7 +51,25 @@
         <?php include('Includes/header.php'); ?>
 <div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
              <?php include('Includes/search_filters_timeline.php'); ?>
-            <div id="my-timeline" style="height: 450px; border: 1px solid #aaa">
+            <div id="my-timeline" style="height: 450px; border: 1px solid #aaa"><script>
+            function onLoad(){
+                var eventSource = new Timeline.DefaultEventSource();
+				
+                var bandInfos = [Timeline.createBandInfo({
+                    eventSource: eventSource,
+                    date: "0",
+                    width: "100%",
+                    intervalUnit: Timeline.DateTime.DECADE,
+                    intervalPixels: 100
+                })];
+                tl = Timeline.create(document.getElementById("my-timeline"), bandInfos);
+                tl.loadJSON("load_coins.php", function(json, url){
+                    eventSource.loadJSON(json, url);
+					tl.finishedEventLoading();
+                });
+				
+            }
+        </script>
             </div>
             <noscript>
                 This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.

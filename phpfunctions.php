@@ -1,11 +1,16 @@
 <?php
 class SunapeeDB
 {
-    const HOST = "mysql.cs.dartmouth.edu";
+    const HOST = "us-cdbr-east-04.cleardb.com";
+    const USER = "bdad21dac711b9";
+    const PASS = "5d77a9ce";
+    const DB   = "heroku_cbef9007d9ba07d"; 
+	/*
+	const HOST = "mysql.cs.dartmouth.edu";
     const USER = "salsbury";
     const PASS = "foaziW37C";
     const DB   = "salsbury15";
-    private $con = NULL;
+    private $con = NULL;*/
 	
 	//$currentidcoin = "";
 
@@ -39,8 +44,21 @@ class SunapeeDB
 			print("<h2>Welcome ".$username.",</h2>");
 			echo '<img style="width: 175px;" ';
 			echo 'src="'.$row["file_path"].'"/>';
-			echo '<h4>Your Corpora:</h4>';
-			$this->get_user_corpora($email);
+			if ($row["status"] == "Student" || $row["status"] == "Admin") {
+				echo '<h4>Your Corpora:</h4>';
+				$this->get_user_corpora($email);
+			}
+			
+			$_SESSION['status'] = $row["status"];
+			echo '<h4>Your status: '.$_SESSION['status'].'</h4>';
+			if (!is_null($row["requested_status"])) {
+				echo '<h4>Requested status: '.$row["requested_status"].'</h4>';
+			}
+			
+			if ($row["status"] == "Guest") {
+				echo '<a class="btn" data-toggle="modal" href="#change_status_modal">Request Student/Admin status</a>';
+			}
+			
 		} 
 		else{
   			header("Location: login.php?test=fail");
@@ -48,6 +66,118 @@ class SunapeeDB
 		
 		
 		mysql_free_result($result);
+	}
+	
+	public function request_change($status, $email) {
+		echo 'Status='.$status;
+		echo 'Email='.$email;
+		$query = "UPDATE user SET requested_status = '".$status."' WHERE email = '".$email."';";
+		$result = mysql_query($query);
+		echo 'Query='.$query;
+		header("Location: index.php");
+	}
+	
+	public function change_status($status, $email) {
+		$query = "UPDATE user SET status = '".$status."' WHERE email = '".$email."';";
+		echo 'Query='.$query;
+		$result = mysql_query($query);
+		
+		$query = "UPDATE user SET requested_status = null WHERE email = '".$email."';";
+		$result = mysql_query($query);
+		header("Location: pending_requests.php");
+	}
+	
+	public function get_pending_requests() {
+		$result = mysql_query("SELECT email as Email, college_affiliation as Affiliation, requested_status as 'Requested Status' FROM user WHERE requested_status IS NOT NULL;");
+		print("<table class=\"table table-bordered table-hover table-striped\">\n<thead><tr>");
+		
+		for($i=0; $i < mysql_num_fields($result); $i++) {
+	    	print("<th>" . mysql_field_name($result, $i) . "</th>");
+		}
+		print ("<th></th>");
+		
+		print("</tr></thead>\n");
+	
+		while ($row = mysql_fetch_assoc($result)) {
+    	      print("\t<tr>\n");
+    	      foreach ($row as $col) {
+       	          print("\t\t<td>$col</td>\n");
+    	      }
+			  print ("\t\t<td><a href=\"request_change.php?email=".$row["Email"]."&&status=".$row["Requested Status"]."\">Approve</a></td>\n");
+    	      print("\t</tr>\n");
+		}
+		print("</table>\n");    
+	}
+	
+	public function check_login($email, $password) {
+		if($this->con === NULL) { return; }
+		$encrypted_password = md5($password);
+		$query = "SELECT * FROM user WHERE email = \"$email\" AND password = \"$encrypted_password\";";
+		$result = mysql_query($query);
+		if (mysql_num_rows($result) != 0) {		
+			if(!$result) { die("SQL Error: " . mysql_error()); }
+		
+			$row = mysql_fetch_assoc($result);
+			$username = $row["name"];
+			$_SESSION['status'] = $row["status"];
+			header("Location: splash.php");
+		} 
+		else{
+  			header("Location: login.php?test=fail");
+		}
+		
+		
+		mysql_free_result($result);
+	}
+	
+	public function delete_user($email) {
+		//$query = "
+	}
+	
+	public function edit_user_info($email, $password) {
+	
+		$result = mysql_query("SELECT * FROM user WHERE email = '".$email."';");
+		$row = mysql_fetch_assoc($result);
+		
+		
+		echo '<div class="control-group"><label class="control-label" for="email">Email:</label><div class="controls">';
+		echo '<p style="margin-top:5px;">'.$email.'</p></div></div>';
+		echo '<div class="control-group"><label class="control-label" for="file">';
+		echo 'Profile Picture</label><div class="controls">';
+		echo '<input type="file" name="file" id="file"> <p style="width: 206px;">(*If you do not upload a file your profile picture will remain unchanged)</p>';
+		echo '</div></div><input type="hidden" name="uploaded" value="1">';
+		echo '<div class="control-group"><label class="control-label" for="email">Name:</label>';
+        echo '<div class="controls"><input type="text" value="'.$row["name"].'" name="name"></div></div>';
+		echo '<div class="control-group"><label class="control-label" for="email">Password:</label>';
+        echo '<div class="controls"><input type="password" name="password" id="password_input_1">';
+		echo '<p style="width: 206px;">(*If you do not enter a password here your password will remain unchanged)</p></div></div>';
+		echo '<div class="control-group"><label class="control-label" for="email">Input Password Again:</label>';
+        echo '<div class="controls"><input type="password" name="password2"></div></div>';
+		echo '<div class="control-group"><label class="control-label" for="email">University Affiliation:</label>';
+        echo '<div class="controls"><input type="text" value="'.$row["college_affiliation"].'" name="affiliation"></div></div>';
+		echo '<center><input class="btn btn-primary btn-large" type="submit" value="Edit Account"></center>';
+
+	
+	}
+	
+	public function get_header($status) {
+	
+		if ($status == "Admin") {
+			echo '<li>Only for admins</li>';
+		}
+		if ( ($status == "Student") || ($status == "Admin") ) {
+	   		echo '<li><a href="index.php">Home</a></li>';
+		}
+		
+		echo '<li><a href="view_all.php">View All</a></li>';
+		echo '<li><a href="timeline.php">Timeline</a></li>';
+		echo '<li><a href="view_tags.php">View Search Tags</a></li>';
+		echo '<li><a href="map.php">Plot Coins</a></li>';
+    	echo '<li><a href="search.php">Search</a></li>';
+		echo '<li><a href="login.php">Logout</a></li>';
+		
+		
+			
 	}
 	
 	public function filter_options() {
@@ -123,12 +253,40 @@ class SunapeeDB
 		mysql_query($query);
 		$iduser = mysql_insert_id();
 		echo $query;
+		$_SESSION["email"] = $email;
+		$_SESSION["password"] = $password;
+		$_SESSION["status"] = $status;
 		header("Location: index.php");
-		//header("Location: user.php?id=".$iduser);
+	}
+	
+	public function edit_user($email, $password, $name, $college_affiliation, $file_path) {
+		$encrypted_pass = md5($password);
+		$query = "UPDATE user SET name = \"".$name."\", college_affiliation = \"".$college_affiliation."\"";
+		if ($password != "blank") {
+			$query .= ", password = \"".$encrypted_pass."\"";
+		}
+		
+		if ($file_path != "blank") {
+			$query .= ", file_path = ";
+			
+			$query .= "\"".$file_path."\"";
+		}
+		
+		
+		$query .= " WHERE email = \"".$email."\";";
+		
+		if ($_FILES["file"]["name"] == UPLOAD_ERR_OK) {
+			echo 'file ok<br>';
+		}
+		else {
+			echo 'file not ok<br>';
+		}
+		mysql_query ($query);
+		echo $query;
+		header ("Location: index.php");
 	}
 	
 	public function insertCoin($date_start, $era_start, $date_end, $era_end, $mint_lat_long, $find_lat_long, $denomination, $minting_authority, $ob_legend, $reverse_legend, $bibliography, $inserted_by, $file, $era_category, $region_category) {
-		//echo 'IM IN INSERTCOIN!!';
 		$start = $era_start.$date_start;
 		$end = $era_end.$date_end;
 		$query = ("INSERT INTO coin (date_start, date_end, mint_lat, mint_long, find_lat, find_long, denomination, minting_authority, obverse_legend, reverse_legend, bibliography, inserted_by, file_path, era_category, region_category)");
@@ -256,6 +414,111 @@ class SunapeeDB
 		echo '</table>';
    	}
 	
+	public function view_all_divs(){
+		$this->search_filter_bar();
+	
+		echo '<div id="view_finder_images" class="desc">';
+			echo '<div style="padding: 20px;">';
+			$this->get_thumbnails();
+		echo '</div></div>';
+		
+	    echo '<div id="view_finder_map" class="desc" style="display: none;">';
+			if (!isset($_POST["start_date"])) {$this->add_markers();}
+		   
+			else {
+				if (isset($_POST["start_date"])) {$_SESSION["start_date"] = $_POST["start_date"];}
+				if (isset($_POST["start_era"])) {$_SESSION["start_era"] = $_POST["start_era"];}
+				if (isset($_POST["end_date"])) {$_SESSION["end_date"] = $_POST["end_date"];}
+				if (isset($_POST["end_era"])) {$_SESSION["end_era"] = $_POST["end_era"];}
+				if (isset($_POST["mint_lat_long"])) {$_SESSION["mint_lat_long"] = $_POST["mint_lat_long"];}
+				if (isset($_POST["find_lat_long"])) {$_SESSION["find_lat_long"] = $_POST["find_lat_long"];}
+			   	$this->add_markers_filtered($_SESSION["start_date"], $_SESSION["start_era"], $_SESSION["end_date"], $_SESSION["end_era"], $_SESSION["mint_lat_long"], $_SESSION["find_lat_long"]);
+						unset($_SESSION["start_date"]);
+						unset($_SESSION["start_era"]);
+						unset($_SESSION["end_date"]);
+						unset($_SESSION["end_era"]);
+						unset($_SESSION["mint_lat_long"]);
+						unset($_SESSION["find_lat_long"]);
+						session_write_close();
+			}
+			echo '<div id="map-canvas"></div>';
+	    echo '</div>';
+		
+	    echo '<div id="view_finder_timeline" class="desc" style="display: none;">';
+			echo '<div id="my-timeline" style="height: 450px; border: 1px solid #aaa">';
+            echo '</div>';
+            echo '<noscript>';
+            echo 'This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.';
+            echo '</noscript>';
+		echo '</div>';
+		
+	    echo '<div id="view_finder_tag_cloud" class="desc" style="display: none;">';
+			echo '<div id="myCanvasContainer">';
+      		echo '<canvas width="1000%" height="500" id="myCanvas">';
+        	echo '<p>Your browser does not support the tag cloud.  Please try updating your browser, it is severely out of date!</p>';
+      		echo '</canvas></div><div id="tags"><ul>';
+			$this->tag_cloud();
+			echo '</ul></div>';
+	    echo '</div>';
+		
+		echo '<div id="view_finder_tag_list" class="desc" style="display: none;">';
+			$this->get_tags();
+		echo '</div>';
+		
+		
+		
+	}
+	
+	public function search_filter_bar() {
+		echo '<div class="navbar" style="margin-bottom: 0px; display: none;" id="filters"><div class="navbar-inner"><form class="navbar-form pull-left" style=" max-width: 93.8%; width: 100%;" name="search_filters" method="post" action="view_collection
+		.php">';
+	   	echo 'From: <input type="text" name="start_date" value="Start" style="width:75px;"/>';
+	   	echo '<select name="start_era" style="width:60px;"><option value="">AD</option><option value="-">BCE</option></select>';
+	   	echo 'To: <input type="text" name="end_date" value="End" style="width:75px;"/><select name="end_era" style="width:60px;">';
+	   	echo '<option value="">AD</option><option value="-">BCE</option></select>|'; 
+   	   	
+		$this->get_locations(0);
+	   	
+		echo '<button type="submit" class="btn">Submit</button></form></div></div>';
+	}
+	
+	public function get_thumbnails() {
+
+		$i = 0;
+		$query = mysql_query("SELECT * FROM coin");
+		echo '<ul class="thumbnails">';
+		while($data=mysql_fetch_assoc($query))
+		{
+			/*if ( ($i % 4) == 0) {
+				echo '</tr><tr>';
+				
+				
+			}*/
+	  		$encoded = $data["img"];
+			//<div id='.$data["idcoin"].'>
+			echo '<li class="span3"><div class="thumbnail">';
+	 		echo '<img alt="300x200" style="display: block; width:auto; height:150px;  overflow: hidden;"';
+			echo 'src="'.$data["file_path"].'"/>';
+			echo '<div class="caption">';
+			echo '<p><a class= "btn btn-primary btn-custom" href="http://www.cs.dartmouth.edu/~salsbury/art2artifact/coin.php?idcoin='.$data["idcoin"].'">View</a></p>';
+			echo '</div></div></li>';
+			$i++;
+			
+		}
+		echo '</ul>';
+	}
+	
+	public function tag_cloud() {
+		// select tag.title, count(*) from tag, coin_has_tag where coin_has_tag.tag_idtag = tag.idtag group by title;
+		$result = mysql_query("SELECT DISTINCT title as Name FROM tag");
+		while ($row = mysql_fetch_assoc($result)) {
+    	   foreach ($row as $col) {
+       	      print("<li><a href=\"http://www.cs.dartmouth.edu/~salsbury/art2artifact/view_all.php?searchby=$col\">$col</a></li>");
+    	   }
+    	   
+		} 
+	}
+	
 	public function view_all_filtered($start_date, $start_era, $end_date, $end_era, $mint_lat_long, $find_lat_long) {
 		if ($start_date == "Start") {$start = " = date_start";	}
 		else {$start = " > ".$start_era.$start_date;}
@@ -361,10 +624,13 @@ class SunapeeDB
 	public function get_locations($b) {
 		$bool = $b;
 		if ($bool == 1) {
-			echo 'Mint Location: <select name="mint_lat_long" style="margin-left: 103px;">';
+			echo '<div class="control-group"><label class="control-label" for="mint_lat_long">Mint Location</label><div class="controls">';
+			echo '<select name="mint_lat_long"><option value="mint_lat, mint_long">Mint Location</option>';
+			
 		}
 		if ($bool == 0) {
 			echo '<select name="mint_lat_long" style="width: 125px; margin-right: 10px;"><option value="mint_lat, mint_long">Mint Location</option>';
+			
 		}
 		
 		$result = mysql_query("SELECT location_name, latitude, longitude FROM location;");
@@ -374,8 +640,10 @@ class SunapeeDB
 		}
 		echo '</select>';
 		if ($bool == 1) {
-			echo '*(If your location does not appear on the list, you must add it <a href="#addLocationModal" data-toggle="modal">here</a>)<br>';
-			echo 'Find Location: <select name="find_lat_long" style="margin-left: 103px;">';
+			echo '</div></div>';
+			echo '<div class="control-group"><label class="control-label" for "find_lat_long">Find Location</label><div class="controls">';
+			echo '<select name="find_lat_long"><option value="find_lat, find_long">Find Location</option>';
+			echo '</div></div>';
 		}
 		if ($bool == 0) {
 			echo '| <select name="find_lat_long" style="width: 125px; margin-right: 10px;"><option value="find_lat, find_long"">Find Location</option>';
@@ -386,9 +654,11 @@ class SunapeeDB
 		}
 		echo '</select>';
 		if ($bool == 1) {
- 			echo '<br>';
+			echo '<br>*(If your location does not appear on the list, you must add it <a href="#addLocationModal" data-toggle="modal">here</a>)<br>';
+ 			echo '</div>';
 		}
 	}
+	
 	
 	public function filter_query($start_date, $start_era, $end_date, $end_era, $mint_lat_long, $find_lat_long) {
 		$start = $start_era.$start_date;
@@ -459,6 +729,23 @@ class SunapeeDB
 		
 	}
 	
+	public function search_in_header() {
+		$tags = mysql_query("SELECT title FROM tag;");
+		
+		$autocompletes = '["'.mysql_fetch_assoc($tags)["title"].'"';
+		while ($row = mysql_fetch_assoc($tags)) {
+			$autocompletes .= ', "'.$row["title"].'"';
+		}
+		
+		
+		$autocompletes = $autocompletes.']';
+		//echo '<p>'.$autocompletes.'</p>';
+		
+		echo '<form class="navbar-search pull-right" name="search_bar" method="post" action="search_php.php">';
+        echo '<input class="search-query" autocomplete="off" id="coin_search" name="search_val" type="text" data-provide="typeahead" data-source=\''.$autocompletes.'\'>';
+		echo '</form>';
+	}
+	
 	public function search_bar() {
 		$tags = mysql_query("SELECT title FROM tag;");
 		
@@ -474,6 +761,19 @@ class SunapeeDB
 		echo '<form style="text-align: center;" class="navbar-form" name="search_bar" method="post" action="search_php.php">';
         echo '<input autocomplete="off" id="coin_search" name="search_val" style="font-size: 44px; width: 400px; height: 60px;" type="text" data-provide="typeahead" data-source=\''.$autocompletes.'\'>';
 		echo '</form>';
+	}
+	
+	public function tag_bar() {
+		$tags = mysql_query("SELECT title FROM tag;");
+		
+		$autocompletes = '["'.mysql_fetch_assoc($tags)["title"].'"';
+		while ($row = mysql_fetch_assoc($tags)) {
+			$autocompletes .= ', "'.$row["title"].'"';
+		}
+		
+		
+		$autocompletes = $autocompletes.']';
+		return $autocompletes;
 	}
 	
 	public function search($tagname) {
@@ -557,7 +857,7 @@ class SunapeeDB
 		echo '<script type="text/javascript">';
       	echo 'function initialize() {';
         echo 'var mapOptions = {';
-        echo 'center: new google.maps.LatLng(42, 12.5),';
+        echo 'center: new google.maps.LatLng(52.749594,-15.380859),';
         echo 'zoom: 5,';
         echo 'mapTypeId: google.maps.MapTypeId.TERRAIN';
         echo '};';
@@ -602,13 +902,13 @@ class SunapeeDB
 		echo '<script type="text/javascript">';
       	echo 'function initialize() {';
         echo 'var mapOptions = {';
-        echo 'center: new google.maps.LatLng(42, 12.5),';
+        echo 'center: new google.maps.LatLng(52.749594,-15.380859),';
         echo 'zoom: 5,';
         echo 'mapTypeId: google.maps.MapTypeId.TERRAIN';
         echo '};';
         echo 'var map = new google.maps.Map(document.getElementById("map-canvas"),';
         echo 'mapOptions);';
-		
+
 		$result = mysql_query("SELECT mint_lat, mint_long, find_lat, find_long, idcoin FROM coin;");
 		while ($row = mysql_fetch_assoc($result)) {
 			echo 'marker = new google.maps.Marker({';
@@ -621,8 +921,8 @@ class SunapeeDB
 			echo 'google.maps.event.addListener(marker, "click", function() {';
   			echo 'window.location.href = marker.url;';
 			echo '});';
-			
-			
+
+
 			echo 'marker = new google.maps.Marker({';
 	        echo 'position: new google.maps.LatLng( ' . $row["find_lat"] . ', '. $row["find_long"] .'),';
 	        echo 'map: map,';
@@ -636,9 +936,9 @@ class SunapeeDB
   			echo 'window.location.href = marker.url;';
 			echo '});';
 		}
-		
+
 	    echo '}';
-	  
+
 	  	echo 'function setmarker(lat,lon)';
 	    echo '{';
 	    echo 'var latlongMarker = new google.maps.LatLng(lat,lon);';
@@ -649,9 +949,11 @@ class SunapeeDB
 	    echo 'title:"Hello World!"';
 	    echo '});'; 
 	    echo '}';
-	  
+
         echo 'google.maps.event.addDomListener(window, "load", initialize);';
         echo '</script>';
+
+
 		
 		
 	}

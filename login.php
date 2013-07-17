@@ -3,7 +3,8 @@
 	if(isset($_SESSION['email'])) {
   		unset($_SESSION['email']);
 		unset($_SESSION['password']);
-		unset($_SESSION['currentcoin']);	
+		unset($_SESSION['currentcoin']);
+		unset($_SESSION['status']);	
 	}
 
 ?>
@@ -16,6 +17,8 @@
 <link rel="stylesheet" href="Content/bootstrap.css"/> 
 <link rel="stylesheet" href="Content/validation.css"/> 
 <link rel="stylesheet" href="Content/bootstrap-responsive.css"/> 
+<style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
+	
 <script type="text/javascript" src="Content/jquery.js"></script>
 <script type="text/javascript" src="Content/bootstrap.js"></script> 
 <script type="text/javascript" src="Content/validation.js"></script>
@@ -53,18 +56,18 @@
 </head>
 
 <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
-	<div class="hero-unit" style="width: 100%; height: 100%; padding: 20px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
-            <center>
+	<div class="hero-unit" style="width: 100%; height: 100%; padding: 20px; background-color: rgba(150, 27, 25, 0.75); border-color: black;">
+            <center class="yellow-text">
             	<br>
                 <h1>Login</h1>
                 <p>
                     To enter the Art2Artifact portal.<br>
-		<a href="register.php">Register for access.</a>
+		<a href="register.php" class="black">Register for access.</a>
                 </p>
 			</center>
 	<div class="modal" style="position: relative; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%; width: 350px;">
 		<div class="modal-body">
-			<form action="index.php" method="post" id="login-form">
+			<form action="login_php.php" method="post" id="login-form">
 			<div class="control-group">
 				<label class="control-label" for="email">Email Address:</label>
 				<div class="controls">
@@ -86,7 +89,7 @@
 				}
 			?>
 			<center>
-			<input type="submit" value="Go!" class="btn btn-primary btn-large"></a>
+			<input type="submit" value="Go!" class="btn btn-primary btn-large btn-custom"></a>
 			</center>
 			</form>
 		</div>

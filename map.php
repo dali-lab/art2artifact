@@ -8,8 +8,9 @@
       #map-canvas { height: 100% }
     </style>
     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEEYml7MPrOcQ3kBIC7s0QGx5cKZBN94U&sensor=false">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUGO7amceEOOtnYLa7lVeDeTJlbg3tenE&sensor=false">
     </script>
+    
 	
 <title>Art2Artifact - Map</title>
 

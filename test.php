@@ -1,95 +1,55 @@
+<!DOCTYPE html>
 <html>
-	<head>
+  <head>
+    <title>TagCanvas example</title>
+    <!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
+    <script src="Content/tagcanvas.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      window.onload = function() {
+        try {
+          TagCanvas.Start('myCanvas','tags',{
+            textColour: '#ff0000',
+            outlineColour: '#ff00ff',
+            reverse: true,
+            depth: 0.8,
+            maxSpeed: 0.05
+          });
+        } catch(e) {
+          // something went wrong, hide the canvas container
+          document.getElementById('myCanvasContainer').style.display = 'none';
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <h1>TagCanvas example page</h1>
+    <div id="myCanvasContainer">
+      <canvas width="1000" height="1000" id="myCanvas">
+        <p>Your browser does not support the tag cloud.  Please try updating your browser, it is severely out of date!</p>
+      </canvas>
+    </div>
+    <div id="tags">
+      <ul>
+	<?php
+	   mb_internal_encoding('UTF-8');
+       mb_http_output('UTF-8');
 		
-<link rel="stylesheet" href="Content/bootstrap.css"/> 
-<link rel="stylesheet" href="Content/bootstrap-responsive.css"/> 
-<link rel="stylesheet" href="Content/style.css" />
-<script type="text/javascript" src="Content/jquery.js"></script>
-<script type="text/javascript" src="Content/bootstrap.js"></script>
-<script>
-    $(document).ready(function(){
-        $("td").click(function(){
-            $(this).addClass("success");
-        });
-    });
-</script>
-<style>
-    .table tbody td.success {
-        background-color: #dff0d8;
-    }
-</style>
-	</head>
-<body>
+       include 'phpfunctions.php';
+       $db = new SunapeeDB();
+       $db->connect();
 
-<table class="table table-bordered">
-    <thead>
-        <tr class="success">
-            <td></td>
-            <th scope="col">Monday</th>
-            <th scope="col">Tuesday</th>
-            <th scope="col">Wednesday</th>
-            <th scope="col">Thursday</th>
-            <th scope="col">Friday</th>
-            <th scope="col">Saturday</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="success">
-            <td class="user">Sam</td>
-            <td class="success"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="user">Mallory</td>
-            <td class="success"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="user">Ethan</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="user">Kate</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="user">Carl</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
+		if (!isset($_SESSION['email'])) {
+	   		$_SESSION['email'] = $_POST["email"];
+	   		$_SESSION['password'] = $_POST["password"];
+	   }
+	   
+       $db->tag_cloud();
+   
+       $db->disconnect();
+?>
 
 
-
-
-
-</body>
+      </ul>
+    </div>
+  </body>
 </html>
