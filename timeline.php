@@ -46,12 +46,16 @@
                 background-color: #794044;
             }
         </style>
+        
+<style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
+
+<link rel="stylesheet" href="Content/bootstrap_navbar.css"/> 
     </head>
     <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;" onload="onLoad();" onresize="onResize();">
         <?php include('Includes/header.php'); ?>
-<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
-             <?php include('Includes/search_filters_timeline.php'); ?>
-            <div id="my-timeline" style="height: 450px; border: 1px solid #aaa"><script>
+<div style="width: 100%; height: 100%; padding: 20px; background-color: rgba(150, 27, 25, 0.75); border-color: black;">
+              <?php include('Includes/search_filters_timeline.php'); ?>
+            <div id="my-timeline" style="height: 450px; width: 90%;border: 1px solid #aaa"><script>
             function onLoad(){
                 var eventSource = new Timeline.DefaultEventSource();
 				

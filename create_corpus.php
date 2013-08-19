@@ -11,7 +11,7 @@
 	}
 	if (isset($_GET['coins'])) {
 		$coinsArray = explode(',', $_GET['coins']);
-		$db->add_to_corpus($_GET['idcorpus'], $coinsArray);
+		$db->add_to_corpus($_GET['corpustitle'], $coinsArray);
 	}
 	$db->disconnect();
 ?>

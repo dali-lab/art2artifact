@@ -7,7 +7,7 @@
        $db->connect();
 	   
 	   //echo '<h3>post coinid is '.$_POST["coinid"].'</h4>';
-	   $db->delete_coin($_GET["coinid"]);
+	   $db->delete_corpus($_GET["idcorpus"]);
 	   
        $db->disconnect();
 	   

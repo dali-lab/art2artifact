@@ -38,9 +38,10 @@ if($_POST["uploaded"]){
 					echo "<img src='$s3file' style='max-width:400px'/><br/>";
 					echo '<b>S3 File URL:</b>'.$s3file;
 					
+					
 					// insert coin into db
 					echo 'ASDF';
-					//$db->insertCoin($_POST["date_start"], $_POST["era_start"], $_POST["date_end"], $_POST["era_end"], $_POST["mint_lat_long"], $_POST["find_lat_long"], $_POST["denomination"], $_POST["mint_authority"], $_POST["obverse_legend"], $_POST["reverse_legend"], $_POST["bibliography"], $_SESSION["email"] , $s3file, $_POST["era_category"], $_POST["region_category"]);
+					$db->insertCoin($_POST["date_start"], $_POST["era_start"], $_POST["date_end"], $_POST["era_end"], $_POST["mint_lat_long"], $_POST["find_lat_long"], $_POST["denomination"], $_POST["mint_authority"], $_POST["obverse_legend"], $_POST["reverse_legend"], $_POST["bibliography"], $_SESSION["email"] , $s3file, $_POST["era_category"], $_POST["region_category"]);
 					
 					
 				}
@@ -78,5 +79,4 @@ if($_POST["uploaded"]){
 	
 }
 }
-
 ?>

@@ -6,6 +6,9 @@
         <link rel="stylesheet" href="Content/bootstrap-responsive.css"/>
         <link rel="stylesheet" href="Content/style.css" />
         <link rel="stylesheet" href="Content/validation.css"/>
+		<link rel="stylesheet" href="Content/bootstrap_navbar.css"/> 
+		
+		<style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
         <script type="text/javascript" src="Content/jquery.js">
         </script>
         <script type="text/javascript" src="Content/bootstrap.js">
@@ -52,15 +55,15 @@
             }); // end document.ready
         </script>
     </head>
-    <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
-        <div class="hero-unit" style="width: 100%; height: 100%; padding: 20px; background-color: rgba(250, 250, 250, 0.75); border-color: black;">
-            <center>
+<body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
+	<div class="hero-unit" style="width: 100%; height: 100%; padding: 20px; background-color: rgba(150, 27, 25, 0.75); border-color: black;">
+             <center style="color: #FACE8D;">
                 <h1>Sign Up</h1>
                 <p>
                     To get access to the Art2Artifact database
                 </p>
 				<p>
-					<a href="login.php">Return to login page.</a>
+					<a href="login.php" class="navy-text"><strong>Return to login page.</strong></a>
 				</p>
 			</center>	
 	<div class="modal" style="position: relative; top: auto; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;">

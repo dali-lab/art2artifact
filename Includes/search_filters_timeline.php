@@ -1,4 +1,4 @@
-<div class="navbar" style="margin-bottom: 0px;">
+<div class="navbar" style="margin-bottom: 0px; width: 90%;">
     <div class="navbar-inner">
         <form class="navbar-form pull-left" name="map_options" method="post" action="timeline.php">
             From: <input type="text" name="start_date" value="Start" style="width:75px;"/>

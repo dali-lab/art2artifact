@@ -10,6 +10,9 @@
 <script type="text/javascript" src="Content/jquery.js"></script>
 <script type="text/javascript" src="Content/bootstrap.js"></script>
 <script type="text/javascript" src="Content/validation.js"></script>
+<style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
+
+<link rel="stylesheet" href="Content/bootstrap_navbar.css"/> 
 <script type="text/javascript">
 	$(document).ready(function(){
 
@@ -41,6 +44,11 @@
 }); // end document.ready
 </script>
 </head>
+<?php
+if (isset($_GET["new_corpus"])) {
+	echo '<script type="text/javascript">$(window).load(function(){$("#add_corpus_modal").modal("show");});</script>';				
+}
+?>
 
 <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
 
@@ -48,9 +56,9 @@
 	
 	
 
-<div class="hero-unit" style="height: 100%; background-color: rgba(250, 250, 250, 0.75); padding: 30px 30px 30px 30px; width: 97%; border-color: black;">
+<div style="width: 100%; height: 100%; padding: 20px; background-color: rgba(150, 27, 25, 0.75); border-color: black;">
  	
-	 <a class="btn btn-large pull-right" data-toggle="modal" href="#add_corpus_modal" style="margin-right: 50px;">+</a>
+	 
 <?php
 	   mb_internal_encoding('UTF-8');
        mb_http_output('UTF-8');
@@ -97,5 +105,31 @@
 		</form>
   </div>
 </div>
+
+<div class="modal hide fade" id="change_status_modal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">x</button>
+		<h3>Request Status Change</h3>
+	</div>
+	<div class="modal-body">
+		<form action="request_change.php" method="post" class="form-horizontal" id="create-corpus">
+			<div class="control-group">
+				<label class="control-label" for="title_id">Title:</label>
+				<div class="controls">
+					<select name="status_change">
+						<option>Student</option>
+						<option>Admin</option>
+					</select>
+				</div>
+			</div>
+	</div>
+	<div class="modal-footer">
+		<input class="btn btn-primary" name="addcorpus" type="submit" value="Next" />
+		</form>
+  </div>
+</div>
+
+
+<?php include('Includes/footer.php'); ?>
 </body>
 </html>

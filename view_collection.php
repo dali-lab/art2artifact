@@ -17,8 +17,10 @@ if (!isset($_SESSION['email'])) {
 <link rel="stylesheet" href="Content/style.css" />
 <script type="text/javascript" src="Content/jquery.js"></script>
 <script type="text/javascript" src="Content/bootstrap.js"></script>
+
+<link rel="stylesheet" href="Content/bootstrap_navbar.css"/> 
+
 <style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
-	
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
       html { height: 100% }
@@ -65,8 +67,21 @@ $(document).ready(function() {
 		});
 	});
 	$("#tag_group").click(function() {
-		$("#the_viewer").toggle();
+		$("#tag_name").toggle();
 	});
+	$("#add_to_corpus").click(function() {
+		$("#corpus_titles").toggle();
+	});
+	$(".thumbnail").click(function(){
+            
+			if ($(this).hasClass("thumbnail-success")) {
+				$(this).removeClass("thumbnail-success");
+			}
+			else {
+				//$(this).removeClass("thumbnail");
+				$(this).addClass("thumbnail-success");
+			}
+    });
 });
 </script>
 <script src="http://api.simile-widgets.org/timeline/2.3.1/timeline-api.js?bundle=true" type="text/javascript"></script>
@@ -99,8 +114,8 @@ $(document).ready(function() {
       window.onload = function() {
         try {
           TagCanvas.Start('myCanvas','tags',{
-            textColour: '#ff0000',
-            outlineColour: '#ff00ff',
+            textColour: 'navy',
+            outlineColour: 'navy',
             reverse: true,
             depth: 0.8,
             maxSpeed: 0.05
@@ -111,35 +126,65 @@ $(document).ready(function() {
         }
       };
 </script>
+<script>
+	$(function(){
+      function yourfunction(event) {
+	  	var coins = [];
+	  	$('.thumbnail-success').each(function() {
+			coins.push(this.id);
+		});
+		var tag_title = $('#tag_title').val();
+		//alert (coins.toString() + "Tag title: " + tag_title);
+		//$.post("tag_coin_set.php", {"tag_title": tag_title});
+		window.location.href = "tag_coin_set.php?tag_title=" + tag_title + "&coins=" + coins.toString();
+      }
+      $('#tag_coins_button').click(yourfunction);
+	});
+	
+    $(function(){
+        function yourfunction2(event){
+            var coins = [];
+            $('.thumbnail-success').each(function(){
+                coins.push(this.id);
+            });
+            var tag_title = $('#corpus_titles').find(":selected").text();
+            
+            window.location.href = "create_corpus.php?corpustitle=" + tag_title + "&coins=" + coins.toString();
+        }
+        $('#add_coins_corpus').click(yourfunction2);
+    });
+	
+</script>
 </head>
-<body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
 <?php include('Includes/header.php'); ?>
 <body style="background-image: url(Content/Login_map.jpg); background-size: 100%;">
 	<div class="hero-unit" style="width: 100%; height: 100%; padding: 20px; background-color: rgba(150, 27, 25, 0.75); border-color: black;">
-     	<div class="btn-toolbar">
+     	<div class="btn-toolbar" style="margin-bottom: 0;">
         <div class="btn-group" data-toggle-name="is_private" data-toggle="buttons-radio">
-            <button type="button" name="view_finder" value="images" class="btn active btn-custom-black" data-toggle="button">
-                Images
+            <button type="button" name="view_finder" value="images" class="btn btn-primary active btn-custom-gray" style="border-color: #13132E; border-width: 1px;" data-toggle="button">
+                <font class="navy-text">Images</font>
             </button>
-            <button id="map_button" type="button" name="view_finder" value="map" class="btn btn-custom-black" data-toggle="button">
-                Map
+            <button id="map_button" type="button" name="view_finder" value="map" class="btn btn-custom-gray" style="border-color: #13132E; border-width: 1px;" data-toggle="button">
+                <font class="navy-text">Map</font>
             </button>
-            <button type="button" name="view_finder" value="tag_cloud" class="btn btn-custom-black" data-toggle="button">
-                Tag Cloud
-            </button>
-            <button type="button" name="view_finder" value="tag_list" class="btn btn-custom-black" data-toggle="button">
-                Tag List
+            <button type="button" name="view_finder" value="tag_list" class="btn btn-custom-gray" style="border-color: #13132E; border-width: 1px;" data-toggle="button">
+                <font class="navy-text">Tag List</font>
             </button>
         </div>
-			<div class="btn-group">
-				<button class="btn btn-primary btn-custom-black dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></button>
-				<ul class="dropdown-menu">
-					<li id="show_filter"><a id="show_filters" href="#">Show/Hide Filters</a></li>
-					<li id="tag_group"><a href="#">Tag Group</a></li>
-				</ul>
-			</div>
+        	<?php 
+        		if (strcmp($_SESSION['status'], "Guest") != 0) {
+					echo '<div class="btn-group">';
+						echo '<button class="btn btn-primary btn-custom-gray dropdown-toggle" data-toggle="dropdown" style="border-color: #13132E; border-width: 1px;" ><font class="navy-text">Tools</font></b></button>';
+						echo '<ul class="dropdown-menu">';
+							echo '<li id="show_filter"><a id="show_filters" href="#">Show/Hide Filters</a></li>';
+							echo '<li id="tag_group"><a id="tag_group" href="#">Tag Group</a></li>';
+							echo '<li id="add_to_corpus"><a id="add_to_corpus" href="#">Add Coins to Corpus</a></li>';
+						echo '</ul>';
+					echo '</div>';
+				}
+			?>
 		</div>
-		<div id="the_viewer" class="modal" style="position: relative; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 97%; height: 70%; overflow-y: scroll; margin-left: 0px; width: 100%; top: 0;">
+		<div id="the_viewer" class="well" style="border-color: #13132E; background: rgba(192, 192, 192, 0.2); padding: 0px; position: relative; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 93%; height: 70%; overflow-y: scroll; margin-left: 0px; width: 100%; top: 0;">
             <?php
 			   mb_internal_encoding('UTF-8');
 		       mb_http_output('UTF-8');

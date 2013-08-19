@@ -22,33 +22,43 @@
 </head>
 
 <body>
-
+	
 <div id="page-container">
 
-	<div id="bg-top">
-		<div id="splash-top-text">
+	<div id="bg-top" style="padding-top: 0px;">
+		<div class="hero-unit" style="width: 100%; height: 100%; background-color: rgba(150, 27, 25, 0.0); border-color: black;">
+
+		<div id="splash-top-text" style="padding-top: 60px;">
 			
 			<center>
-				<h1 style="margin-top: 0px; font-size: 45px; color: #FACE8D;" >
+				<h1 style="margin-top: 0px; font-size: 45px;" class="yellow-text" >
 					Art 2 Artifact
 				</h1>
-				<img src="images/splash_icon.png" style="height: 55%; padding-top: 20px; max-height: 250px;" />
 			</center>
+		</div>
 		</div>
 	</div>
 	
 	<div id="bg-middle">
 		<center>
-			<a href="about.php" class="black" style="color: #000000">About</a>
-			<a href="Account Information" class="black" style="color: #000000; padding-left: 150px; padding-right: 150px;">Account Information</a>
-			<a href="Tutorial" class="black" style="color: #000000">Tutorial</a>
+			<a href="about.php" class="navy-text">About</a>
+			<a href="edit_user.php" class="navy-text" style=" padding-left: 100px; padding-right: 50px;">Account Information</a>
+			<a href="index.php" class="navy-text" style="padding-left: 50px; padding-right: 100px;">Home</a>
+			<a href="tutorial.php" class="navy-text">Tutorial</a>
 		</center>
 	</div>
 	
 	<div id="bg-bottom">
 		<center>
 			<a class="white" href="view_collection.php" style="font-size: 30px;">View Collection</a><br><br><br>
-			<a class="white" href="index.php" style="font-size:30px;">Build Corpora</a>
+			<?php 
+				if (strcmp($_SESSION["status"], "Guest") != 0) {
+					echo '<a class="white" href="index.php" style="font-size:30px;">Build/Explore Corpora</a>';
+				}
+				else {
+					echo '<a class="white" href="view_published_corpora.php" style="font-size: 30px;">Explore Published Corpora</a>';
+				}
+			?>
 		</center>
 	</div>
 

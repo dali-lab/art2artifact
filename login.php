@@ -18,7 +18,8 @@
 <link rel="stylesheet" href="Content/validation.css"/> 
 <link rel="stylesheet" href="Content/bootstrap-responsive.css"/> 
 <style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
-	
+
+<link rel="stylesheet" href="Content/bootstrap_navbar.css"/> 
 <script type="text/javascript" src="Content/jquery.js"></script>
 <script type="text/javascript" src="Content/bootstrap.js"></script> 
 <script type="text/javascript" src="Content/validation.js"></script>
@@ -62,7 +63,7 @@
                 <h1>Login</h1>
                 <p>
                     To enter the Art2Artifact portal.<br>
-		<a href="register.php" class="black">Register for access.</a>
+		<a href="register.php" style="color: #0E142E;"><strong>Register for access.</strong></a>
                 </p>
 			</center>
 	<div class="modal" style="position: relative; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%; width: 350px;">
