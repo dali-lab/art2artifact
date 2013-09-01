@@ -1,14 +1,14 @@
 
 <div class="navbar" style="margin-bottom: 0px;">
     <div class="navbar-inner">
-    	<a class="brand" href="about.php">Art 2 Artifact</a>
+    	<a class="brand" href="splash.php">Art 2 Artifact</a>
     	<ul class="nav">
 			<?php
 				session_start();
 				
-		       		echo '<li><a href="splash.php">Home</a></li>';
+		       		echo '<li><a href="index.php">Home</a></li>';
 				if ($_SESSION['status'] == "Student") {
-					echo '<li><a href="index.php?new_corpora=true">Build new Corpus</a></li>';
+					echo '<li><a href="index.php?new_corpus=true">Build new Corpus</a></li>';
 				}
 				
 		       	if ($_SESSION['status'] == "Admin") {
@@ -47,6 +47,7 @@
 				echo '<ul class="dropdown-menu">';
 				echo '<li><a href="edit_user.php">Edit Personal Info</a></li>';
 				echo '<li><a href="tutorial.php">Tutorial</a></li>';
+				echo '<li><a href="about.php">About Art2Artifact</a></li>';
 				echo '<li><a href="login.php">Logout</a></li>';
 				echo '</ul></li></ul>';
 			?>	

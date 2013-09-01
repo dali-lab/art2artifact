@@ -5,14 +5,7 @@ class SunapeeDB
     const USER = "bdad21dac711b9";
     const PASS = "5d77a9ce";
     const DB   = "heroku_cbef9007d9ba07d"; 
-	/*
-	const HOST = "mysql.cs.dartmouth.edu";
-    const USER = "salsbury";
-    const PASS = "foaziW37C";
-    const DB   = "salsbury15";
-    private $con = NULL;*/
 	
-	//$currentidcoin = "";
 
     public function connect()
     {
@@ -270,30 +263,10 @@ class SunapeeDB
         echo ' </form>';
 		
 	}
-	
-	public function get_header($status) {
-	
-		if ($status == "Admin") {
-			echo '<li>Only for admins</li>';
-		}
-		if ( ($status == "Student") || ($status == "Admin") ) {
-	   		echo '<li><a href="index.php">Home</a></li>';
-		}
-		
-		echo '<li><a href="view_all.php">View All</a></li>';
-		echo '<li><a href="timeline.php">Timeline</a></li>';
-		echo '<li><a href="view_tags.php">View Search Tags</a></li>';
-		echo '<li><a href="map.php">Plot Coins</a></li>';
-    	echo '<li><a href="search.php">Search</a></li>';
-		echo '<li><a href="login.php">Logout</a></li>';
-		
-		
-			
-	}
-	
+
 	public function filter_options() {
 	  
-	   echo '<div class="navbar" style="margin-bottom: 0px; margin-right: 30px; margin-left:0px; width: 850px;"><div class="navbar-inner" ><form class="navbar-form pull-left" name="map_options" method="post" action="view_all.php">';
+	   echo '<div class="navbar" style="margin-bottom: 0px; margin-right: 30px; margin-left:0px; width: 850px;"><div class="navbar-inner" ><form class="navbar-form pull-left" name="map_options" method="post" action="view_collection.php">';
 	   echo 'From: <input type="text" name="start_date" value="Start" style="width:75px;"/>';
 	   echo '<select name="start_era" style="width:60px;"><option value="">AD</option><option value="-">BCE</option></select>';
 	   echo '| To: <input type="text" name="end_date" value="End" style="width:75px;"/><select name="end_era" style="width:60px;">';
@@ -436,7 +409,7 @@ class SunapeeDB
 							echo '<li><a data-toggle="modal" href="#deleteCorpusModal">Delete Corpus</a></li>';
 				if (strcmp($data["published"], "Published") != 0) {
 							echo '<li><a data-toggle="modal" href="#publishCorpusModal">Publish Corpus</a></li>';
-							echo '<li id="delete_group"><a id="delete_group" href="#">Delete Group</a></li>';
+							echo '<li id="delete_group"><a id="delete_group">Delete Group</a></li>';
 				}
 
 						echo '</ul>';
@@ -512,6 +485,8 @@ class SunapeeDB
 	}
 
 	public function save_notes($idcorpus, $text) {
+		$text = mysql_real_escape_string($text);
+		$idcorpus = mysql_real_escape_string($idcorpus);
 		$query = "update corpus set notes = '".$text."' where idcorpus = ".$idcorpus.";";
 		echo $query;
 		mysql_query($query);
@@ -590,6 +565,13 @@ class SunapeeDB
 		echo 'SUPPPPP BETCHES';
 		$start = $era_start.$date_start;
 		$end = $era_end.$date_end;
+		
+		$ob_legend = mysql_real_escape_string($ob_legend);
+		$reverse_legend = mysql_real_escape_string($reverse_legend);
+		$denomination = mysql_real_escape_string($denomination);
+		$minting_authority = mysql_real_escape_string($minting_authority);
+		$denomination = mysql_real_escape_string($bibliography);
+		
 		$query = "UPDATE coin SET date_start = ".$start.", date_end = ".$end;
 			echo 'mint_lat_long='.$mint_lat_long;
 			echo 'find_lat_long='.$find_lat_long;
@@ -625,8 +607,15 @@ class SunapeeDB
 	public function insertCoin($date_start, $era_start, $date_end, $era_end, $mint_lat_long, $find_lat_long, $denomination, $minting_authority, $ob_legend, $reverse_legend, $bibliography, $inserted_by, $file, $era_category, $region_category) {
 		$start = $era_start.$date_start;
 		$end = $era_end.$date_end;
+		$ob_legend = mysql_real_escape_string($ob_legend);
+		$reverse_legend = mysql_real_escape_string($reverse_legend);
+		$denomination = mysql_real_escape_string($denomination);
+		$minting_authority = mysql_real_escape_string($minting_authority);
+		$denomination = mysql_real_escape_string($bibliography);
+		
 		$query = ("INSERT INTO coin (date_start, date_end, mint_lat, mint_long, find_lat, find_long, denomination, minting_authority, obverse_legend, reverse_legend, bibliography, inserted_by, file_path, era_category, region_category)");
 		$query .= ("VALUES (".$start.",".$end.",". $mint_lat_long.",".$find_lat_long.",\"".$denomination."\",\"".$minting_authority."\",\"".$ob_legend."\",\"".$reverse_legend."\",\"".$bibliography."\",'"."diana.salsbury@gmail.com"."','".$file."','".$era_category."','".$region_category."');");
+		echo $query;
 		mysql_query($query);
 		
 		echo $query;
@@ -664,6 +653,8 @@ class SunapeeDB
 	}
 	
 	public function create_corpus($created_by, $title, $description) {
+		$title = mysql_real_escape_string($title);
+		$description = mysql_real_escape_string($description);
 		$query = "INSERT INTO corpus (created_by, title, description, published) values ('".$created_by."', '".$title."', '".$description."', 'Unpublished');";
 		mysql_query($query);
 				
@@ -684,6 +675,7 @@ class SunapeeDB
 	}
 	
 	public function tag_coin_set($tag_title, $coinsArray) {
+		$tag_title = mysql_real_escape_string($tag_title);
 		$query = "SELECT idtag FROM tag WHERE title = \"$tag_title\";";
 		echo 'tag id search query = '.$query;
 		$result = mysql_query($query);
@@ -715,6 +707,20 @@ class SunapeeDB
 			mysql_query($query);
 		}
 		header("Location: corpus.php?idcorpus=".$idcorpus);
+	}
+	
+	public function delete_tag_from_coins($tagtitle, $coins) {
+		$query = "Select idtag from tag where title = \"$tagtitle\";";
+		echo $query."\n";
+		$result = mysql_query($query);
+		$data = mysql_fetch_assoc($result);
+		$idtag = $data["idtag"];
+		foreach ($coins as $coin) {
+			$query = "DELETE from coin_has_tag where coin_idcoin = ".$coin." and tag_idtag = ".$idtag.";";
+			echo $query."\n";
+			mysql_query($query);
+		}
+		header("Location: view_collection.php?searchby=".$tagtitle);
 	}
 	
 	public function delete_corpus($idcorpus) {
@@ -770,6 +776,7 @@ class SunapeeDB
 		echo 'Tag id is: '.$tagid["idtag"];
 		$result = mysql_query("DELETE FROM coin_has_tag WHERE tag_idtag = ".$tagid["idtag"].";");
 		$result = mysql_query("DELETE FROM tag WHERE title = \"".$tagName."\";");
+		header("Location: view_collection.php");
 	}
 
    	// Prints pictures
@@ -801,7 +808,11 @@ class SunapeeDB
 		echo '<div id="view_finder_images" class="desc">';
 			echo '<div style="padding: 20px;">';
 			if (isset($_GET["searchby"])) {
-				echo '<p style="color: #FACE8D;">Coins with search tag: '.$_GET["searchby"].'</p>';
+				echo '<p style="color: #FACE8D;">Coins with search tag: '.$_GET["searchby"];
+				if ($_SESSION["status"] == "Admin") {
+					echo '<a style="margin-left: 10px;" class="btn btn-mini" href="delete_tag.php?title='.$_GET["searchby"].'">Delete Tag</a>';
+					echo '<a style="margin-left: 10px;" class="btn btn-mini" id="delete_tag_from_coins_button">Delete Tag from Selected Coins</a></p>';
+				}
 				$this->get_tagged_coins($_GET["searchby"]);
 			}
 			else {
@@ -952,7 +963,7 @@ class SunapeeDB
 		$result = mysql_query("SELECT DISTINCT title as Name FROM tag");
 		while ($row = mysql_fetch_assoc($result)) {
     	   foreach ($row as $col) {
-       	      print("<li><a href=\"http://www.cs.dartmouth.edu/~salsbury/art2artifact/view_all.php?searchby=$col\">$col</a></li>");
+       	      print("<li><a href=\"http://www.cs.dartmouth.edu/~salsbury/art2artifact/view_collection.php?searchby=$col\">$col</a></li>");
     	   }
     	   
 		} 
@@ -1097,10 +1108,11 @@ class SunapeeDB
 		$query = mysql_query("DELETE FROM in_corpus WHERE coin_idcoin = $idcoin;");
 		$query = mysql_query("DELETE FROM coin WHERE idcoin = $idcoin;");
 		
-		header("Location: view_all.php");
+		header("Location: view_collection.php");
 	}
 	
 	public function add_location($name, $lat, $long) {
+		$name = mysql_real_escape_string($name);
 		$query = mysql_query("INSERT INTO location (location_name, latitude, longitude) VALUES (\"$name\", $lat, $long);");
 		header("Location: add_coin.php");
 	}

@@ -7,12 +7,17 @@
        $db->connect();
 	   
 	   //echo '<h3>post coinid is '.$_POST["coinid"].'</h4>';
-	   $db->delete_tag($_GET["title"]);
-	   
+	   if (isset($_GET["coins"])) {
+	   		$coinsArray = explode(',', $_GET['coins']);
+	   		$db->delete_tag_from_coins($_GET["title"], $coinsArray);
+	   }
+	   else {
+	   		$db->delete_tag($_GET["title"]);
+	   }
        $db->disconnect();
 	   echo '<a href="view_tags.php">Back</a>';
 	   
-	   header("Location: view_all.php");
+	   
 	   
 	   
 	 ?>

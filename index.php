@@ -21,14 +21,15 @@
 	// http://docs.jquery.com/Plugins/Validation/
 	// http://docs.jquery.com/Plugins/Validation/validate#toptions
 
-		$('#login-form').validate({
+		$('#create-corpus').validate({
 	    rules: {
 	      title: {
 	        maxlength: 45,
 	        required: true
 	      },
 	      description: {
-	        maxlength:200
+	        maxlength:200,
+	        required: true
 	      }
 	    },
 			highlight: function(element) {
@@ -40,6 +41,8 @@
 				.closest('.control-group').removeClass('error').addClass('success');
 			}
 	  });
+	  
+	  
 
 }); // end document.ready
 </script>

@@ -42,8 +42,7 @@
 	<div id="bg-middle">
 		<center>
 			<a href="about.php" class="navy-text">About</a>
-			<a href="edit_user.php" class="navy-text" style=" padding-left: 100px; padding-right: 50px;">Account Information</a>
-			<a href="index.php" class="navy-text" style="padding-left: 50px; padding-right: 100px;">Home</a>
+			<a href="index.php" class="navy-text" style=" padding-left: 100px; padding-right: 100px;">My Account</a>
 			<a href="tutorial.php" class="navy-text">Tutorial</a>
 		</center>
 	</div>

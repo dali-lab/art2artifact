@@ -60,7 +60,7 @@
 		the GoogleMaps v3 API and Simile Timeline Widget.  Some minor JSON was used in populating the 
 		Simile Timeline.  Art2Artifact is hosted on Heroku.  All PHP functionality was coded by 
 		Diana Salsbury.  The code for Art2Artifact is public, and can be found on 
-		<a href="www.github.com/dsalsbury/art2artifact">www.github.com/dsalsbury/art2artifact</a>.  
+		<a href="http://www.github.com/dsalsbury/art2artifact">www.github.com/dsalsbury/art2artifact</a>.  
 		Please keep in mind that the site is currently undergoing construction, and report and issues to: 
 		diana.l.salsbury.15@dartmouth.edu.
 	</p>

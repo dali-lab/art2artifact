@@ -9,28 +9,24 @@ if (!isset($_SESSION['email'])) {
         <link rel="stylesheet" href="Content/bootstrap.css"/>
         <link rel="stylesheet" href="Content/bootstrap-responsive.css"/>
         <link rel="stylesheet" href="Content/style.css" />
-<style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
-
-<link rel="stylesheet" href="Content/bootstrap_navbar.css"/> 
         <link rel="stylesheet" href="Content/validation.css"/>
+		<link rel="stylesheet" href="Content/bootstrap_navbar.css"/> 
+		
+		<style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
         <script type="text/javascript" src="Content/jquery.js">
         </script>
         <script type="text/javascript" src="Content/bootstrap.js">
         </script>
         <script type="text/javascript" src="Content/validation.js">
         </script>
+<style type="text/css" media="all">@import "Content/master.css";</style>  <style type="text/css" media="all">@import "Content/master.css";</style>
+
+<link rel="stylesheet" href="Content/bootstrap_navbar.css"/> 
         <script type="text/javascript">
-        
             $(document).ready(function(){
-            
-                // Validate
-                // http://bassistance.de/jquery-plugins/jquery-plugin-validation/
-                // http://docs.jquery.com/Plugins/Validation/
-                // http://docs.jquery.com/Plugins/Validation/validate#toptions
-                
-                $('#add-coin').validate({
+             	$('#add-coin').validate({
                     rules: {
-                        date_start: {
+                       	date_start: {
                             digits: true,
                             required: true
                         },
@@ -38,19 +34,9 @@ if (!isset($_SESSION['email'])) {
                             digits: true,
                             required: true
                         },
-						
-                        mint_location: {
-                            required: true
-                        },
-						
-                        find_location: 
-                            digits: true,
-                            required: true
-                        },
-                        bibliography: {
-                            required: true,
-                            maxlength: 200
-                        },
+                       	bibliography: {
+                       		required: true
+                       	},
                         obverse_legend: {
                             maxlength: 500
                         },
@@ -65,26 +51,20 @@ if (!isset($_SESSION['email'])) {
                         element.text('OK!').addClass('valid').closest('.control-group').removeClass('error').addClass('success');
                     }
                 });
-                
+
                 $('#add-location').validate({
                     rules: {
                         lat: {
                             number: true,
                             required: true
                         },
-                        long: {
-                            number: true,
-                            required: true
-                        },
                         loc_name: {
                             required: true
+                        },
+                        long: {
+                        	required: true,
+                        	number: true
                         }
-                    },
-                    highlight: function(element){
-                        $(element).closest('.control-group').removeClass('success').addClass('error');
-                    },
-                    success: function(element){
-                        element.text('OK!').addClass('valid').closest('.control-group').removeClass('error').addClass('success');
                     }
                 });
                 

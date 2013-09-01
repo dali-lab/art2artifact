@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Art2Artifact - Add Coin</title>
+        <title>Art2Artifact - Register User</title>
         <link rel="stylesheet" href="Content/bootstrap.css"/>
         <link rel="stylesheet" href="Content/bootstrap-responsive.css"/>
         <link rel="stylesheet" href="Content/style.css" />

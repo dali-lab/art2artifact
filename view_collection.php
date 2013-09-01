@@ -127,6 +127,10 @@ $(document).ready(function() {
       };
 </script>
 <script>
+function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
 	$(function(){
       function yourfunction(event) {
 	  	var coins = [];
@@ -153,6 +157,20 @@ $(document).ready(function() {
         }
         $('#add_coins_corpus').click(yourfunction2);
     });
+$(function(){
+      function yourfunction3(event) {
+	  	var coins = [];
+	  	$('.thumbnail-success').each(function() {
+			coins.push(this.id);
+		});
+		//var tag_title = $('#tag_title').val();
+		//alert (coins.toString() + "Tag title: " + tag_title);
+		//$.post("tag_coin_set.php", {"tag_title": tag_title});
+		var $_GET = getParameterByName("searchby");
+		window.location.href = "delete_tag.php?coins=" + coins.toString() + "&title=" + $_GET;
+      }
+      $('#delete_tag_from_coins_button').click(yourfunction3);
+	});
 	
 </script>
 </head>
@@ -171,18 +189,18 @@ $(document).ready(function() {
                 <font class="navy-text">Tag List</font>
             </button>
         </div>
-        	<?php 
-        		if (strcmp($_SESSION['status'], "Guest") != 0) {
-					echo '<div class="btn-group">';
-						echo '<button class="btn btn-primary btn-custom-gray dropdown-toggle" data-toggle="dropdown" style="border-color: #13132E; border-width: 1px;" ><font class="navy-text">Tools</font></b></button>';
-						echo '<ul class="dropdown-menu">';
-							echo '<li id="show_filter"><a id="show_filters" href="#">Show/Hide Filters</a></li>';
-							echo '<li id="tag_group"><a id="tag_group" href="#">Tag Group</a></li>';
-							echo '<li id="add_to_corpus"><a id="add_to_corpus" href="#">Add Coins to Corpus</a></li>';
-						echo '</ul>';
-					echo '</div>';
-				}
-			?>
+		<div class="btn-group">
+		<button class="btn btn-primary btn-custom-gray dropdown-toggle" data-toggle="dropdown" style="border-color: #13132E; border-width: 1px;" ><font class="navy-text">Tools</font></b></button>
+			<ul class="dropdown-menu">
+				<li id="show_filter"><a id="show_filters" href="#">Show/Hide Filters</a></li>
+				<?php 
+        			if (strcmp($_SESSION['status'], "Guest") != 0) {
+						echo '<li id="tag_group"><a id="tag_group" href="#">Tag Group</a></li>';
+						echo '<li id="add_to_corpus"><a id="add_to_corpus" href="#">Add Coins to Corpus</a></li>';
+					}
+				?>
+			</ul>
+		</div>
 		</div>
 		<div id="the_viewer" class="well" style="border-color: #13132E; background: rgba(192, 192, 192, 0.2); padding: 0px; position: relative; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 93%; height: 70%; overflow-y: scroll; margin-left: 0px; width: 100%; top: 0;">
             <?php

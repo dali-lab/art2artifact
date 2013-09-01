@@ -49,7 +49,7 @@ html, body {
 }
 
 #bg-top {
-	background-image:url('../images/Login_map_icon	.png');
+	background-image:url('../images/Login_map_icon.jpg');
 	background-size: 100% 100%;
 	height: 53.5%;
 	padding-top: 5%;
@@ -57,7 +57,7 @@ html, body {
 }
 
 #bg-bottom {
-	background-image: url(../images/bg_bottom.jpg);
+	background-image: url('../images/bg_bottom.jpg');
 	background-size: 100% 100%;
 	height: 43%;
 	padding-top: 5%;
