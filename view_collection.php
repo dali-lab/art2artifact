@@ -37,8 +37,8 @@ if (!isset($_SESSION['email'])) {
       var map;
       function initialize() {
         var mapOptions = {
-          center: new google.maps.LatLng(-34.397, 150.644),
-          zoom: 8,
+          center: new google.maps.LatLng(42.6387,12.3926),
+          zoom: 5,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById("map-canvas"),
@@ -57,7 +57,7 @@ $(document).ready(function() {
 	$("#map_button").click(function() {
 		google.maps.event.trigger(map, 'resize');
 		map.setZoom( map.getZoom() );
-		var center = new google.maps.LatLng(55.37911,-17.226562);
+		var center = new google.maps.LatLng(42.6387,12.3926);
 		map.setCenter(center);
 	});
 	$("#show_filter").click(function() {

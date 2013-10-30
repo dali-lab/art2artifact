@@ -70,8 +70,8 @@
                 
 				<form action="add_user_php.php" method="post" ENCTYPE="multipart/form-data" class="form-horizontal" id="add-user" style="margin-top: 10px; margin-left: 10px; margin-bottom: 20px;">
 					<?php 
-						if (isset($_GET["error"])) {
-							echo '<p><font color="red">'.$_GET["error"].'!</font></p>';
+						if (isset($_GET["msg"])) {
+							echo '<p><font color="red">'.$_GET["msg"].'!</font></p>';
 						}
 					?>
 					<div class="control-group">
